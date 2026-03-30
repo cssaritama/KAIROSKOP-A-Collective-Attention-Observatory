@@ -162,30 +162,31 @@ Spark processes the stream with a **5-minute trigger interval**, applying enrich
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────────┐
-│                     KAIROSKOP — Architecture                         │
-│                                                                       │
-│  SOURCES              STREAM LAYER            STORAGE                │
-│  ───────              ────────────            ───────                │
-│  Wikipedia API   ───▶ Kafka                                          │
-│  Wikipedia SSE   ───▶ 4 Topics          ───▶ GCS Data Lake           │
-│  GDELT 2.0       ───▶                         (Parquet, partitioned  │
-│  arXiv RSS       ───▶                          by event_date)        │
-│                        │                                             │
-│                   Spark Structured       ───▶ BigQuery               │
-│                   Streaming                   (partitioned by date,  │
-│                   (enrichment +               clustered by source    │
-│                    metric UDFs)               + topic_category)      │
-│                                                    │                 │
-│  TRANSFORMATION       ORCHESTRATION          PRESENTATION            │
-│  ──────────────       ─────────────          ────────────            │
-│  Bruin SQL assets ◀── Bruin Pipeline    ───▶ Looker Studio           │
-│  staging → marts      daily at 06:00 UTC      2-tile dashboard       │
-│  → metrics            quality checks +        (categorical +         │
-│                        lineage                 temporal)             │
-│                                                                       │
-│  INFRASTRUCTURE: Terraform (GCP)    CONTAINERS: Docker Compose       │
-└─────────────────────────────────────────────────────────────────────┘
+┌───────────────────────────────────────────────────────────────────────┐
+│ KAIROSKOP — Architecture │
+│ │
+│ SOURCES STREAM LAYER STORAGE │
+│ ─────── ───────────── ─────── │
+│ Wikipedia API ───▶ Kafka │
+│ Wikipedia SSE ───▶ 4 Topics ───▶ GCS Data Lake │
+│ GDELT 2.0 ───▶ (Parquet, partitioned │
+│ arXiv RSS ───▶ by event_date) │
+│ │ │
+│ Spark Structured ───▶ BigQuery │
+│ Streaming (partitioned by date, │
+│ (enrichment + clustered by source │
+│ metric UDFs) + topic_category) │
+│ │ │ │
+│ TRANSFORMATION ORCHESTRATION PRESENTATION │
+│ ────────────── ───────────── ──────────── │
+│ Bruin SQL assets ◀── Bruin Pipeline ───▶ Looker Studio │
+│ staging → marts daily at 06:00 UTC 2-tile dashboard │
+│ → metrics quality checks + (categorical + │
+│ lineage temporal) │
+│ │
+│ INFRASTRUCTURE: Terraform (GCP) CONTAINERS: Docker Compose │
+└───────────────────────────────────────────────────────────────────────┘
+
 ```
 
 ---
