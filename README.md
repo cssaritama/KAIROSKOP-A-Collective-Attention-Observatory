@@ -131,6 +131,34 @@ A **Kairos Event** is flagged automatically when `synchronicity_score` ≥ 0.8 �
 
 ---
 
+## Streaming Pipeline — How It Works
+
+KAIROSKOP implements a **full producer/consumer streaming architecture** using Apache Kafka and Apache Spark Structured Streaming — satisfying the stream processing criterion with active producers, Kafka topics as the message bus, and Spark as the continuous consumer.
+
+```
+PRODUCERS (3 active processes)          KAFKA TOPICS (4)
+────────────────────────────            ────────────────
+producer_wikipedia.py  ──────────────▶  wiki_pageviews
+                       ──────────────▶  wiki_changes
+producer_gdelt.py      ──────────────▶  gdelt_events
+producer_arxiv.py      ──────────────▶  arxiv_papers
+                                               │
+                                               ▼
+                                    CONSUMER: Spark Structured
+                                    Streaming (streaming_job.py)
+                                    ├── Reads all 4 topics
+                                    ├── Parses + enriches events
+                                    ├── Computes metric UDFs
+                                    ├── Writes → GCS (Parquet)
+                                    └── Writes → BigQuery
+```
+
+Each producer runs as an independent process. Wikipedia uses a native **Server-Sent Events (SSE)** stream — a continuous HTTP connection that pushes events in real time with no polling. GDELT is polled every 15 minutes and published as micro-batches. arXiv is published daily. All events share a canonical JSON schema (defined in `kafka/schemas.py`) so Spark reads them with a single unified job.
+
+Spark processes the stream with a **5-minute trigger interval**, applying enrichment UDFs (philosophical metrics) before writing to both the GCS data lake and BigQuery simultaneously.
+
+---
+
 ## Architecture
 
 ```
@@ -182,13 +210,32 @@ A **Kairos Event** is flagged automatically when `synchronicity_score` ≥ 0.8 �
 
 ## Dashboard
 
-**[View Live Dashboard →](#)** *(replace with your Looker Studio URL after deployment)*
+**[View Live Dashboard → Looker Studio](https://lookerstudio.google.com)** *(URL updated after deployment — see Step 9 in How to Run)*
+
+> **Screenshot:** The dashboard screenshot will be added after the first successful pipeline run. The two tiles below are fully specified and reproducible by following Step 9.
 
 ### Tile 1 — Collective Attention by Domain (Categorical Distribution)
-A stacked bar chart showing the distribution of global attention across six knowledge domains this week: Science & Technology, Conflict & Politics, Health & Society, Environment & Climate, Culture & Identity, Economics & Finance. Each bar is broken down by **Medium Dominance** — revealing not just what civilization is focused on, but which layer is leading that focus (McLuhan's insight made visual).
+
+A stacked bar chart showing the distribution of global attention across six knowledge domains for the trailing 30 days:
+
+- Science & Technology
+- Conflict & Politics
+- Health & Society
+- Environment & Climate
+- Culture & Identity
+- Economics & Finance
+
+Each bar is broken down by **Medium Dominance** — revealing not just what civilization is focused on, but which layer (science, media, or collective memory) is leading that focus. This is McLuhan's insight made directly visible: the channel shapes the message.
 
 ### Tile 2 — Synchronicity Score Over Time (Temporal Distribution)
-A time series showing the weekly **Synchronicity Score** (Jung) overlaid with the **Shadow Index** (Freud). Kairos Events — moments when all four independent sources converge — are annotated directly on the chart. This tile answers the central question of the project: *when did the collective mind synchronize, and what was it repressing at the same time?*
+
+A time series chart for the trailing 90 days showing:
+
+- **Primary line:** Weekly `synchronicity_score` (Jung) — cross-source convergence index (0–1)
+- **Secondary line:** `shadow_index` (Freud) — gap between private search and public media
+- **Annotations:** Kairos Events (synchronicity ≥ 0.8) marked directly on the chart
+
+This tile answers the central question: *when did the collective mind synchronize — and what was it repressing at the same time?*
 
 ---
 
