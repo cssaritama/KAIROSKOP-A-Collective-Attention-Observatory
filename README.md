@@ -7,7 +7,7 @@
 
 ---
 
-## What is KAIROSKOP?
+## What is KAIROSKOP? - Problem Statement
 
 Every second, thousands of humans are doing things that leave a data trail:
 
