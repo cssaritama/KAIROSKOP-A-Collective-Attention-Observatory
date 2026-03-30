@@ -389,4 +389,20 @@ KAIROSKOP is the instrument that observes civilization's collective attention an
 
 ---
 
-*Built for the DataTalksClub Data Engineering Zoomcamp 2026 · Bruin Sponsored Competition*
+## 🙏 Acknowledgments
+
+**Huge thanks to:**
+
+- **DataTalksClub** & **Alexey Grigorev** – DE Zoomcamp 2026 made this possible. The great free data engineering education.
+- **Bruin Data** – Open source sponsor. Bruin CLI replaced dbt+Kestra, simplified everything with lineage+quality checks out-of-box.
+- **Zoomcamp Community** – Slack debug heroes.
+- **GCP Free Tier** – Kept costs at $0 for prototype.
+
+⭐ **If this helps you, star the repo!** Featured in [DE Zoomcamp Gallery](https://github.com/DataTalksClub).
+
+
+---
+
+*Built with ❤️ for the DataTalksClub Data Engineering Zoomcamp 2026 · Bruin Sponsored Competition · Collective Noosphere ("Layer of human thought enveloping Earth") – cssaritama, March 2026*
+
+---
