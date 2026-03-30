@@ -1,0 +1,29 @@
+# KAIROSKOP — Python Dependencies
+# Install with: pip install -r requirements.txt
+
+# ── Kafka ─────────────────────────────────────────────
+confluent-kafka==2.3.0          # Kafka producer/consumer client
+sseclient-py==1.8.0             # Server-Sent Events (Wikipedia stream)
+
+# ── HTTP & feeds ──────────────────────────────────────
+requests==2.31.0
+feedparser==6.0.11              # arXiv RSS parsing
+httpx==0.26.0                   # Async HTTP (GDELT polling)
+
+# ── Data processing ───────────────────────────────────
+pandas==2.2.0
+pyarrow==15.0.0                 # Parquet read/write
+python-dateutil==2.8.2
+
+# ── GCP ───────────────────────────────────────────────
+google-cloud-storage==2.14.0
+google-cloud-bigquery==3.17.1
+
+# ── NLP (lightweight, no GPU required) ───────────────
+langdetect==1.0.9               # Language detection for GDELT events
+
+# ── Utilities ─────────────────────────────────────────
+python-dotenv==1.0.1            # Load .env variables
+tenacity==8.2.3                 # Retry logic for API calls
+structlog==24.1.0               # Structured logging
+rich==13.7.0                    # Pretty terminal output

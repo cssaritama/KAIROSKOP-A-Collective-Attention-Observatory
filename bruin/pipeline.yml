@@ -1,0 +1,118 @@
+# KAIROSKOP — Bruin Pipeline Definition
+# Orchestrates the full transformation pipeline on a daily schedule.
+# Documentation: https://getbruin.com/docs/bruin/concepts/pipeline/
+
+name: kairoskop-daily-pipeline
+schedule: "0 6 * * *"          # Runs daily at 06:00 UTC
+
+# Catch-up policy: if a run is missed, execute once on next trigger
+# rather than running all missed intervals
+catch_up: false
+
+notifications:
+  slack:
+    channel: "#kairoskop-alerts"
+
+tasks:
+
+  # ── Stage 1: Load GCS → BigQuery (Bruin ingestr) ────────────────────
+  - name: ingest_gcs_to_bq
+    type: bq.transfer
+    description: >
+      Load Parquet files written by Spark Streaming from GCS
+      into BigQuery raw table.  Bruin ingestr handles schema evolution
+      and partition alignment automatically.
+    parameters:
+      source: gcs
+      destination: bigquery
+      source_path: "gs://${GCS_BUCKET_NAME}/attention_events/"
+      destination_table: "${GCP_PROJECT_ID}.${BQ_DATASET}.attention_events_raw"
+      file_format: parquet
+      partition_field: event_date
+      write_disposition: WRITE_APPEND
+
+  # ── Stage 2: Staging layer ───────────────────────────────────────────
+  - name: stg_wikipedia
+    type: bq.sql
+    path: assets/staging/stg_wikipedia.sql
+    depends_on:
+      - ingest_gcs_to_bq
+
+  - name: stg_gdelt
+    type: bq.sql
+    path: assets/staging/stg_gdelt.sql
+    depends_on:
+      - ingest_gcs_to_bq
+
+  - name: stg_arxiv
+    type: bq.sql
+    path: assets/staging/stg_arxiv.sql
+    depends_on:
+      - ingest_gcs_to_bq
+
+  # ── Stage 3: Fact table ──────────────────────────────────────────────
+  - name: fact_attention_events
+    type: bq.sql
+    path: assets/marts/fact_attention_events.sql
+    depends_on:
+      - stg_wikipedia
+      - stg_gdelt
+      - stg_arxiv
+
+  # ── Stage 4: Aggregation mart ────────────────────────────────────────
+  - name: agg_daily_attention
+    type: bq.sql
+    path: assets/marts/agg_daily_attention.sql
+    depends_on:
+      - fact_attention_events
+
+  # ── Stage 5: Philosophical metrics (run in parallel) ─────────────────
+  - name: synchronicity_score
+    type: bq.sql
+    path: assets/metrics/synchronicity_score.sql
+    depends_on:
+      - agg_daily_attention
+
+  - name: shadow_index
+    type: bq.sql
+    path: assets/metrics/shadow_index.sql
+    depends_on:
+      - agg_daily_attention
+
+  - name: consciousness_level
+    type: bq.sql
+    path: assets/metrics/consciousness_level.sql
+    depends_on:
+      - fact_attention_events
+
+  # ── Stage 6: Dashboard mart ──────────────────────────────────────────
+  - name: mart_dashboard
+    type: bq.sql
+    path: assets/marts/mart_dashboard.sql
+    depends_on:
+      - synchronicity_score
+      - shadow_index
+      - consciousness_level
+
+  # ── Stage 7: Quality checks ──────────────────────────────────────────
+  - name: quality_checks
+    type: bq.sql
+    description: >
+      Validate that the dashboard mart has data for today and that
+      key metrics are within expected bounds.
+    depends_on:
+      - mart_dashboard
+    sql: |
+      SELECT
+        -- Fail if no data for yesterday
+        COUNTIF(event_date = DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY)) AS yesterday_rows,
+        -- Fail if synchronicity score is ever > 1.0 (normalisation error)
+        COUNTIF(total_signal > 1.0 AND tile_type = 'temporal') AS invalid_sync_scores,
+        -- Fail if any category has zero events for 3+ consecutive days
+        COUNT(DISTINCT topic_category) AS active_categories
+      FROM `${GCP_PROJECT_ID}.${BQ_DATASET}.mart_dashboard`
+      WHERE event_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY)
+    assertions:
+      - yesterday_rows > 0
+      - invalid_sync_scores = 0
+      - active_categories >= 4

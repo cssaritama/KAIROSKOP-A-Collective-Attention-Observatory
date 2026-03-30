@@ -1,0 +1,18 @@
+# KAIROSKOP — Bruin Project Configuration
+# Documentation: https://getbruin.com/docs/bruin/
+
+name: kairoskop
+
+default_environment: production
+
+environments:
+  production:
+    connections:
+      google_cloud_platform:
+        - name: "kairoskop-gcp"
+          project_id: "${GCP_PROJECT_ID}"
+          service_account_file: "../credentials/sa-key.json"
+          location: "US"
+
+default_connections:
+  google_cloud_platform: "kairoskop-gcp"
