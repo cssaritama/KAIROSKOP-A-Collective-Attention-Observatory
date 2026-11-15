@@ -1,18 +1,27 @@
 """Unit tests for KAIROSKOP public attention snapshot exporter."""
 from __future__ import annotations
 
-from pathlib import Path
 import json
-import pytest
+from pathlib import Path
 
-from src.kairoskop.attention_snapshot import (
-    DEFAULT_TRACKED_TOPICS,
-    build_attention_snapshot,
-    classify_attention_regime,
-    compute_attention_velocity,
-    compute_attention_zscore,
-    export_attention_snapshot,
-)
+try:
+    from src.kairoskop.attention_snapshot import (
+        DEFAULT_TRACKED_TOPICS,
+        build_attention_snapshot,
+        classify_attention_regime,
+        compute_attention_velocity,
+        compute_attention_zscore,
+        export_attention_snapshot,
+    )
+except ImportError:
+    from kairoskop.attention_snapshot import (
+        DEFAULT_TRACKED_TOPICS,
+        build_attention_snapshot,
+        classify_attention_regime,
+        compute_attention_velocity,
+        compute_attention_zscore,
+        export_attention_snapshot,
+    )
 
 
 def test_compute_attention_velocity():

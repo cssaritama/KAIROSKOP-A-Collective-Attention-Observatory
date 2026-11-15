@@ -12,12 +12,11 @@ Standard:
 """
 from __future__ import annotations
 
-from pathlib import Path
 import datetime
 import json
 import math
+from pathlib import Path
 from typing import Any
-
 
 DEFAULT_TRACKED_TOPICS = [
     {
@@ -95,7 +94,7 @@ def compute_attention_velocity(history: list[float], eps: float = 1e-4) -> tuple
 
 def compute_attention_zscore(current: float, mean: float, std: float, eps: float = 1e-4) -> float:
     """Compute Gaussian Z-score of attention volume against historical baseline."""
-    effective_std = std if std > eps else eps
+    effective_std = max(eps, std)
     z = (current - mean) / effective_std
     if math.isnan(z) or math.isinf(z):
         return 0.0
@@ -117,7 +116,7 @@ def classify_attention_regime(zscore: float, velocity: float) -> str:
 def build_attention_snapshot(items: list[dict] | None = None) -> dict[str, Any]:
     """Build normalized attention snapshot schema across tracked topics."""
     source_items = items if items is not None else DEFAULT_TRACKED_TOPICS
-    timestamp = datetime.datetime.now(datetime.timezone.utc).isoformat()
+    timestamp = datetime.datetime.now(datetime.UTC).isoformat()
 
     metrics: dict[str, Any] = {}
     for entry in source_items:

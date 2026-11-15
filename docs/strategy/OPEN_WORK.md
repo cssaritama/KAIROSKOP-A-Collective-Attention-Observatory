@@ -8,6 +8,7 @@ Maintainer: Carlos Saritama (`cssaritama`)
 ## Completed Tasks
 
 - **`KAIROSKOP-001` (DONE 2026-11-14):** Created public attention snapshot exporter (`src/kairoskop/attention_snapshot.py`) with velocity/acceleration derivation, Z-score normalization, regime classification, and portable JSON contract (`data/signals/attention_metrics.json`). Passing 5 unit tests.
+- **`KAIROSKOP-001B` / `T-12` (DONE & VERIFIED 2026-11-15):** Resolved failing GitHub Actions CI workflow. Hardened `.github/workflows/ci.yml` with `PYTHONPATH=.:src`, active sensor ruff linting, resilient module imports, and verified 100% green remote CI.
 
 ---
 

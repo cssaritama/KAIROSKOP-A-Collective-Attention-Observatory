@@ -1,6 +1,6 @@
 # Current State — KAIROSKOP Collective Attention Observatory
 
-Status: **OPERATIONAL & SYNCHRONIZED (2026-11-14)**  
+Status: **OPERATIONAL, CI VERIFIED & SYNCHRONIZED (2026-11-15)**  
 Strategic Unit: Collective Attention & Narrative Dynamics (Tier 2 Strategic Flagship)  
 Maintainer: Carlos Saritama (`cssaritama`)  
 Governing Rule: Pure Public Attention Sensor (Strictly zero proprietary trading logic)
@@ -17,3 +17,7 @@ Governing Rule: Pure Public Attention Sensor (Strictly zero proprietary trading 
 2. **Deterministic Verification:**
    - Unit test suite (`tests/test_attention_snapshot.py`) passing 100% (5/5 tests in pytest).
    - Zero paid API keys, zero external runtime dependencies.
+3. **CI/CD Reliability & GitHub Actions Parity:**
+   - GitHub Actions workflow (`.github/workflows/ci.yml`) hardened with `PYTHONPATH=.:src` environment parity.
+   - Quality checks configured with strict active sensor linting (`ruff check src/ tests/`) and resilient import fallbacks.
+   - Unit test suite passing 100% across local and remote CI runners (5/5 tests).
