@@ -8,6 +8,8 @@
 credentials/
 *.json
 !bruin/.bruin.yml
+# The adoption record of the engineering standard is not a credential.
+!docs/standards/adoption.json
 
 # Python
 __pycache__/
