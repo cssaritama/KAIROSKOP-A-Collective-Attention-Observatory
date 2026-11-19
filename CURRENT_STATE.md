@@ -1,7 +1,6 @@
 # Current State — KAIROSKOP Collective Attention Observatory
 
 Status: **OPERATIONAL, CI VERIFIED & SYNCHRONIZED (2026-11-15)**  
-Strategic Unit: Collective Attention & Narrative Dynamics (Tier 2 Strategic Flagship)  
 Maintainer: Carlos Saritama (`cssaritama`)  
 Governing Rule: Pure Public Attention Sensor (Strictly zero proprietary trading logic)
 
