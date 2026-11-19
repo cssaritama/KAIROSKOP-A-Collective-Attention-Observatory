@@ -24,7 +24,7 @@ KAIROSKOP is a real-time data engineering platform that ingests these signals co
 
 > **What do collective attention patterns reveal about the psychological state of a civilization — and can we detect the precise moments when that state changes?**
 
-This is not a philosophical exercise. It is a data engineering problem. The pipeline is real. The data is live. The metrics are computable. The philosophy gives them meaning.
+This is not a philosophical exercise. It is a data engineering problem. The pipeline is real and its metrics are computable; the streaming source and the dashboard are not connected yet (see the open work). The philosophy gives them meaning.
 
 ---
 

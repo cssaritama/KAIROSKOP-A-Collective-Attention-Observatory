@@ -1,6 +1,6 @@
 # Current State — KAIROSKOP Collective Attention Observatory
 
-Status: **OPERATIONAL, CI VERIFIED & SYNCHRONIZED (2026-11-15)**  
+Status: **In development (2026-11-19). CI passes; the streaming source and the dashboard are not connected yet.**  
 Maintainer: Carlos Saritama (`cssaritama`)  
 Governing Rule: Pure Public Attention Sensor (Strictly zero proprietary trading logic)
 

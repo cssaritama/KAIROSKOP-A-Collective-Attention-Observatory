@@ -17,7 +17,7 @@ unless the change needs that evidence.
 Rules:
 
 - Schema, snapshot specification and CI workflow changes need recorded evidence: a content hash, the test run and a green CI run.
-- Ideas go to `IDEAS.md`; external data sources and references to `REFERENCES.md`.
+- Ideas and data sources are recorded in `docs/strategy/OPEN_WORK.md` until they need their own file.
 - `docs/standards/` is a verified copy of the Systems Studio Engineering Standard. Do not edit it; start specifications, decisions and verification records from `docs/standards/templates/`.
 - Work on a focused branch and open a pull request. Keep `main` working.
 
