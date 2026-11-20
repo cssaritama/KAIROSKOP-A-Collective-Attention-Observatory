@@ -205,7 +205,7 @@ Spark processes the stream with a **5-minute trigger interval**, applying enrich
 | Orchestration | Bruin Pipeline | Scheduling, quality checks, column-level lineage |
 | Containers | Docker Compose | Local Kafka + Spark development environment |
 | Dashboard | Looker Studio | Two-tile analytical dashboard |
-| CI/CD | GitHub Actions | Lint + type check + Terraform validate + Bruin validate |
+| CI/CD | GitHub Actions | Tests block the build; lint, type, Terraform and Bruin checks report without blocking yet |
 
 ---
 
@@ -308,7 +308,7 @@ kairoskop/
 
 ### Step 1 — Clone and configure
 ```bash
-git clone https://github.com/YOUR_USERNAME/kairoskop.git
+git clone https://github.com/cssaritama/KAIROSKOP-A-Collective-Attention-Observatory.git kairoskop
 cd kairoskop
 mkdir credentials
 cp .env.example .env
@@ -398,7 +398,7 @@ KAIROSKOP is the instrument that observes civilization's collective attention an
 - **Zoomcamp Community** – Slack debug heroes.
 - **GCP Free Tier** – Kept costs at $0 for prototype.
 
-⭐ **If this helps you, star the repo!** Featured in [DE Zoomcamp Gallery](https://github.com/DataTalksClub).
+⭐ **If this helps you, star the repo!**
 
 
 ---
